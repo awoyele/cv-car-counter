@@ -4,6 +4,24 @@ An offline computer-vision tool that analyzes an exact 20-second interval from a
 
 The primary output is a **count plus auditable crossing events** (JSON). An annotated MP4 is a diagnostic artifact, not the source of truth.
 
+## Pipeline
+
+```mermaid
+flowchart LR
+    A[Stationary traffic video] --> B[Extract exact 20-second interval]
+    C[Camera YAML<br/>lanes, gates, directions] --> D
+    B --> E{Detector backend}
+    E -->|YOLO| F[Car detections]
+    E -->|RF-DETR| F
+    F --> G[ByteTrack<br/>persistent car IDs]
+    G --> D[Lane and ordered-gate validation]
+    D --> H[Verified crossing events]
+    H --> I[report.json<br/>counts and audit trail]
+    G --> J[Annotated MP4<br/>diagnostic artifact]
+```
+
+Each car is counted only after its tracked path crosses the configured gates in the permitted order and direction.
+
 See [`.cursor/PLAN.md`](.cursor/PLAN.md) for the full design.
 
 ## Sample video
