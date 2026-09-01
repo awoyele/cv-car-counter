@@ -1,0 +1,60 @@
+# Bind-mount host folders into the container:
+#   ./videos  -> /videos   (source clips)
+#   ./outputs -> /outputs  (reports and annotated clips)
+#   ./configs -> /configs  (camera YAML)
+#   ./weights -> /models   (detector checkpoints, reused across runs)
+#
+# Usage:
+#   docker compose run --rm counter
+#   docker compose --profile rfdtr run --rm rfdtr
+
+x-common: &common
+  volumes:
+    - ./videos:/videos:ro
+    - ./outputs:/outputs
+    - ./configs:/configs:ro
+    - ./weights:/models
+
+services:
+  counter:
+    <<: *common
+    build:
+      context: .
+      args:
+        EXTRAS: yolo
+        TORCH_BACKEND: cpu
+    image: cv-car-counter:yolo
+    command:
+      - --video
+      - /videos/13361265-hd_1920_1080_60fps.mp4
+      - --start
+      - "0"
+      - --config
+      - /configs/pexels_13361265.yaml
+      - --detector
+      - yolo
+      - --weights
+      - /models/yolov8n.pt
+      - --output
+      - /outputs/yolo-run
+
+  rfdtr:
+    <<: *common
+    profiles: ["rfdtr"]
+    build:
+      context: .
+      args:
+        EXTRAS: rfdtr
+        TORCH_BACKEND: cpu
+    image: cv-car-counter:rfdtr
+    command:
+      - --video
+      - /videos/13361265-hd_1920_1080_60fps.mp4
+      - --start
+      - "0"
+      - --config
+      - /configs/pexels_13361265.yaml
+      - --detector
+      - rfdtr
+      - --output
+      - /outputs/rfdtr-run

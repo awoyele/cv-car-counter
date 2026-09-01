@@ -1,0 +1,50 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+.eggs/
+build/
+dist/
+wheels/
+*.egg
+
+# Virtual envs
+.venv/
+.venv-*/
+venv/
+env/
+ENV/
+
+# Tooling
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.tox/
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+
+# Project artifacts
+outputs/
+runs/
+*.annotated.mp4
+*.canonical.mp4
+reports/
+!configs/
+
+# Models / weights (download on demand)
+weights/
+*.pt
+*.pth
+*.onnx
+*.engine
+*.mlpackage
+
+# Keep the folder, ignore downloaded clips
+videos/*
+!videos/.gitkeep

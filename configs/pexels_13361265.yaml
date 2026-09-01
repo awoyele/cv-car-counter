@@ -1,0 +1,59 @@
+# Camera configuration for videos/13361265-hd_1920_1080_60fps.mp4
+#
+# This scene is a single carriageway shot at an oblique angle. Because of
+# perspective, the two travel directions OVERLAP in image-y at every x, so the
+# lanes cannot be separated by horizontal bands. Instead both directions share
+# one road polygon, and each track is assigned to a direction by its MOTION
+# (sign of dx), not by which polygon contains it.
+#
+# Gate geometry was chosen from sampled YOLO track trajectories:
+#   - right-to-left cars cross x=1040 then x=880 (moving left)
+#   - left-to-right  cars cross x=880  then x=1040 (moving right)
+# Gates are a narrow 160px strip near the frame center, where perspective
+# drift across the strip is small.
+
+camera_id: pexels-13361265
+version: "2"
+frame_size: [1920, 1080]
+
+# Both lanes share this road polygon (the whole travel surface).
+# (lane.polygon below is duplicated per lane so each lane is self-contained.)
+
+lanes:
+  # Right-to-left direction.
+  - id: lane-rtl
+    polygon:
+      - [120, 580]
+      - [1820, 580]
+      - [1820, 1090]
+      - [120, 1090]
+    entry_gate:
+      - [1040, 580]
+      - [1040, 1090]
+    exit_gate:
+      - [880, 580]
+      - [880, 1090]
+    travel_direction: [-1, 0]
+
+  # Left-to-right direction (same polygon, opposite gate order).
+  - id: lane-ltr
+    polygon:
+      - [120, 580]
+      - [1820, 580]
+      - [1820, 1090]
+      - [120, 1090]
+    entry_gate:
+      - [880, 580]
+      - [880, 1090]
+    exit_gate:
+      - [1040, 580]
+      - [1040, 1090]
+    travel_direction: [1, 0]
+
+ignore_polygons: []
+
+tracker:
+  line_dead_band_px: 6
+  minimum_track_age_seconds: 0.0
+  maximum_track_gap_seconds: 0.7
+  minimum_directional_displacement_px: 8

@@ -1,0 +1,60 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "cv-car-counter"
+version = "0.1.0"
+description = "Offline computer-vision tool that counts cars crossing configured gates in a 20-second traffic-video interval."
+readme = "README.md"
+requires-python = ">=3.12"
+license = { text = "MIT" }
+authors = [{ name = "cv-car-counter" }]
+keywords = ["computer-vision", "traffic", "yolo", "rf-detr", "bytetrack"]
+# Core dependencies are intentionally ML-framework-free so the package imports
+# and the test suite run without torch. Install a detector extra to enable a
+# backend:  pip install -e ".[yolo]"   or   pip install -e ".[rfdtr]"
+
+dependencies = [
+    "numpy>=1.26",
+    "opencv-python>=4.9",
+    "pyyaml>=6.0",
+    "av>=12",
+    "supervision>=0.21",
+]
+
+[project.optional-dependencies]
+# Bundled ffmpeg/ffprobe binaries so the tool runs without a system ffmpeg.
+ffmpeg = [
+    "static-ffmpeg>=2.0",
+]
+# YOLO detector path (Ultralytics). Requires torch, which may not yet have
+# wheels for the very newest Python versions — install on Python 3.12/3.13.
+yolo = [
+    "ultralytics>=8.2",
+]
+# RF-DETR detector path (permissive checkpoint terms).
+# Pin <1.6 so transformers 4.x + torch 2.2 (Intel Mac wheels) still work.
+# 1.6+ requires transformers>=5.1, which needs torch>=2.5.
+rfdtr = [
+    "rfdetr>=1.4.3,<1.6",
+]
+dev = [
+    "pytest>=8",
+    "pytest-cov>=5",
+]
+
+[project.scripts]
+cv-car-counter = "cv_car_counter.cli:main"
+cv-car-calibrate = "cv_car_counter.tools.calibrate:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra -q"
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"

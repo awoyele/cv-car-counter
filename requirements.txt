@@ -1,0 +1,10 @@
+# Core runtime dependencies (no ML framework required to import the package).
+# Install a detector backend extra to actually run a detector:
+#   pip install -e ".[yolo]"    # Ultralytics YOLO (needs torch; use py3.12/3.13)
+#   pip install -e ".[rfdtr]"   # RF-DETR
+numpy>=1.26
+opencv-python>=4.9
+pyyaml>=6.0
+av>=12
+supervision>=0.21
+pytest>=8
