@@ -34,6 +34,18 @@ The sample clip is **not** stored in git. Download [Cars on Alley in City](https
 
 That saves `videos/13361265-hd_1920_1080_60fps.mp4`. Pass `--force` to re-download. The default analysis interval is `[0s, 20s)`.
 
+## Example output
+
+YOLO on the sample clip (`[0s, 20s)`): **5 cars** counted (3 left-to-right, 2 right-to-left).
+
+**Input** — canonical 20-second analysis clip: [example_output/input.mp4](example_output/input.mp4)
+
+<video src="example_output/input.mp4" controls width="720" title="Canonical 20-second input clip"></video>
+
+**Output** — annotated diagnostic video with boxes, track IDs, and trajectories: [example_output/output.mp4](example_output/output.mp4)
+
+<video src="example_output/output.mp4" controls width="720" title="Annotated YOLO output"></video>
+
 ## Detector paths
 
 Two interchangeable detector backends live under `src/cv_car_counter/detectors/`:
